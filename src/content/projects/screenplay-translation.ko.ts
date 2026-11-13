@@ -29,7 +29,6 @@ export const screenplayTranslationKo: CaseStudy = {
     { value: "하루", label: "장편 한 편 전 공정" },
     { value: "83%", label: "감사관 백테스트 재현율, 세 번째 시도" },
     { value: "0건", label: "환각, 다섯 번 모두(자체 관문)" },
-    { value: "24시간", label: "안에 제작사 수정 요청 모두 반영" },
   ],
   leads: {
     results: "장편 네 편을 두 방향으로 다섯 번 끝까지 번역했습니다.",

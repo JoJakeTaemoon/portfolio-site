@@ -26,7 +26,6 @@ export const reputationMarketKo: CaseStudy = {
     { value: "238 / 242", label: "기획 질문 중 답을 받은 수" },
     { value: "25 / 25", label: "UX 점검 1순위 문제 해결" },
     { value: "2,583", label: "자동 테스트, 재실행에서 모두 통과" },
-    { value: "24시간", label: "안에 고객 수정 요청 모두 반영" },
   ],
   leads: {
     results: "새 기획서로 시작해 첫 커밋 13일 뒤 운영툴까지 만들었고, 20일 뒤인 10월 30일에 마지막 커밋을 남겼습니다. 푸시 알림 연결은 보류했고, 기획 질문 4건은 답을 기다립니다.",

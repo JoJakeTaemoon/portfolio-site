@@ -5,13 +5,13 @@ export const siteEn: Site = {
   headline: "Engineering lead with an AI agent team", // M-09: the hub h1's words, now the one headline
   roleShort: "Engineering lead",
   intro: [
-    "I design and run a role-based AI agent team. The agents do design, implementation, testing and review; I set the roles and the gates (the checks work must pass before it moves on). Irreversible or outward-facing actions, such as deploys and pushes, run on my instruction; design decisions go ahead on the agents' recommendation and are reviewed from the decision record. In 2026 I ran client projects this way, and every change request from the client was shipped within 24 hours. One of them, a fintech platform, went from scratch to the production data migration in five months.",
+    "I design and run a role-based AI agent team. The agents do design, implementation, testing and review; I set the roles and the gates (the checks work must pass before it moves on). Irreversible or outward-facing actions, such as deploys and pushes, run on my instruction; design decisions go ahead on the agents' recommendation and are reviewed from the decision record. When a project needs it, I do the product planning too. In 2026 I ran client projects this way, and every change request from the client was shipped within 24 hours. One of them, a fintech platform, went from scratch to the production data migration in five months.",
     "Over more than 18 years in Korea, Vietnam, Singapore and the US I held the CTO role at 5 companies, founded or co-founded 6, and built a Vietnam R&D centre into a 50-person organisation in 6 months.",
   ],
   github: { publicContributions: 239, privateContributions: 3493, asOf: "2026-11" },
   now: "I design and run a role-based AI agent team: I define an 8-stage pipeline and assign design, implementation, QA and review to the agent team's 13 roles. So that work never stalls, decisions go ahead on a recommended default, are logged, and are reviewed later. Over five months the team built a fintech platform (mobile app, operator CMS, partner portals) and moved the old v1's data onto the production server.",
   lead: [
-    "Built organisations from zero: a Vietnam R&D centre of 50 people in 6 months, and, as a co-founding CTO, a development team that shipped an MVP in 6 months and a 12-person product team.",
+    "Built organisations from zero: a Vietnam R&D centre of 50 people in 6 months, and, as a co-founding CTO, a development team that shipped an MVP in 6 months and a 12-person product team. More recently, from 2024, I managed a 30-person development team directly.",
     "Split the roles and put gates in place: when setting up a company I defined finance, HR and engineering operations and the development methodology first, and built hiring assignments as real codebases with tests already in them (45 submissions in 2025). The agent team was split into 13 roles (9 plus 4 reviewers), and three of the reviewers sit in the pipeline's review stage.",
     "Record decisions with their reasons: the agent team went ahead on recommended defaults so work never stalled; 192 of the 199 decisions record how hard they are to reverse, and those that reverse an earlier decision name the one they reverse.",
     "Kept coding under leader titles: EVM smart contracts as a CTO, iPhone apps and back ends as a co-founding CTO.",
@@ -36,7 +36,7 @@ export const siteEn: Site = {
     floatFact: "CTO at 5 companies · 50-person Vietnam R&D centre in 6 months", // M-08: _career.md:78; no ", " inside, the README summary line splits at it
     work: "6 featured projects",
     roles: "Roles and gates in the agent team",
-    rolesLine: "With people, I ran a 12-person product team as a co-founding CTO (2014–2015), set up a company's operations and designed its hiring assignments (45 submissions in 2025). On the 2026 EWA platform, the agent team's roles were split like this.",
+    rolesLine: "With people, I managed a 30-person development team directly from 2024, ran a 12-person product team as a co-founding CTO (2014–2015), and set up a company's operations and designed its hiring assignments (45 submissions in 2025). On the 2026 EWA platform, the agent team's roles were split like this.",
     rolesStrong: "gates",
     career: "18+ years of work in 4 countries",
     careerLine: "I held the CTO role at 5 companies, founded or co-founded 6, and built a Vietnam R&D centre into a 50-person organisation in 6 months.",

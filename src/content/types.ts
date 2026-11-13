@@ -84,7 +84,7 @@ type ProjectBase = {
 /** Full case study: needs architecture, flow and timeline visuals (checked by the validator). */
 export type CaseStudy = ProjectBase & {
   kind: "case";
-  metrics: [Metric, Metric, Metric, Metric] | [Metric, Metric, Metric, Metric, Metric]; // 5th: D-046 turnaround
+  metrics: [Metric, Metric, Metric, Metric]; // the 24h turnaround is not a case metric (D-061)
   visuals: [Visual, Visual, Visual, ...Visual[]];
   problem: Paragraphs;
   myRole: Paragraphs;

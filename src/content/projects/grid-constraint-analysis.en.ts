@@ -26,7 +26,6 @@ export const gridConstraintAnalysisEn: CaseStudy = {
     { value: "29→46%", label: "lead-trigger hits, one hypothesis (dev; train 22→32%)" }, // M-05: :355
     { value: "−39 pts", label: "agreement, production path (train)" }, // M-05: a level, :351
     { value: "+22 · +13", label: "from the definition split (train · dev)" }, // M-05: a change, :352-354
-    { value: "24 h", label: "to ship every change request" },
   ],
   leads: {
     results: "Over 42 days I logged 22 hypothesis experiments, adopting 6 and rejecting 6; one of the rejections is hypothesis 04, which was merged and then rolled back.",

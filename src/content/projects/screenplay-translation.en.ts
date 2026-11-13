@@ -29,7 +29,6 @@ export const screenplayTranslationEn: CaseStudy = {
     { value: "One day", label: "full pipeline, one feature" },
     { value: "83%", label: "auditor backtest recall, 3rd attempt" },
     { value: "0", label: "hallucinations, all 5 runs (own gate)" },
-    { value: "24 h", label: "to ship every change request" },
   ],
   leads: {
     results: "Four feature scripts were translated end to end five times in two directions.",

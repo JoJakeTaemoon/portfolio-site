@@ -25,12 +25,11 @@ export const fieldServiceOpsEn: CaseStudy = {
     { value: "123 days", label: "first commit to real use" },
     { value: "About 8 min", label: "to load old data into production" },
     { value: "1,263", label: "automated tests, all passing in CI" },
-    { value: "24 h", label: "to ship every change request" },
   ],
   leads: {
     results: "Real use began 123 days after the first commit, and 26 days later the old management program's data was moved into production.",
     problem: "The job was to replace an old program built around single appliances with a system built around the customer, shared by the office, the technicians and the customers themselves.",
-    role: "The client set the scope by answering my questions; I designed those questions and ran the agent team.",
+    role: "I did the planning, designing the questions with their options and recommended defaults, and the client set the scope by answering them. I also ran the agent team.",
     decisions: "Of the five decisions, four (technician screen, technician assignment, where the data is kept, migration scope) were set by the client answering my questions, and all five are written up with their options and costs.",
     quality: "Stateful records move through state machines, production data jobs sit behind layered safeguards, and all 1,263 automated tests passed in the Nov 6 CI run.",
     retro: "The equipment-code rule changed three times, and the deploy chain failed often in its first four days.",

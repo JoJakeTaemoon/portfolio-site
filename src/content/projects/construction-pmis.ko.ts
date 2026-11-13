@@ -28,7 +28,6 @@ export const constructionPmisKo: CaseStudy = {
     { value: "1일", label: "일보 재설계 → 코어 병합" },
     { value: "2번", label: "이미 만든 기능을 범위에서 뺀 결정" },
     { value: "12종", label: "역할 4 × 언어 3 사용자 매뉴얼" },
-    { value: "24시간", label: "안에 고객 수정 요청 모두 반영" },
   ],
   leads: {
     results: "범용 관리 시스템으로 시작해 작업일보 중심으로 다시 지었고, 고객 인수 테스트까지 진행했습니다.",

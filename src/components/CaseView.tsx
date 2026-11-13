@@ -57,7 +57,7 @@ const shownOf = (p: Paragraphs, lang: Locale, budget = BUDGET) => {
    the container's width (labels 13.5px); only where the section still holds two screens at 1024x768. */
 type Fit = { foot?: number; figsPhone?: number; pad?: number; budget?: number; phone?: number; results?: number; resultsPhone?: number; rows?: number; code?: number; codePhone?: number; fold?: boolean; terse?: boolean; tab?: number; codeTab?: number; figsTab?: number; restTab?: boolean; rowsTab?: number; terseTab?: boolean; padDesk?: number; stackTab?: boolean };
 const FIT: Record<string, Partial<Record<SectionId | "hero", Fit>>> = {
-  "ko:ewa": { hero: { foot: 92 }, architecture: { stackTab: true }, role: { tab: 360 }, quality: { tab: 360 } }, // tab (task 13 verify): the round-2 leads ran #role and #quality just past one tablet screen
+  "ko:ewa": { hero: { foot: 92 }, architecture: { stackTab: true }, role: { tab: 360, fold: true }, quality: { tab: 360 } }, // tab (task 13 verify): the round-2 leads ran #role and #quality just past one tablet screen; role fold (Q-019(b)): the money-path sentence ran #role past one 1440x900 screen, so its further figures fold, as on en
   "en:ewa": { results: { results: 2, rows: 4 }, architecture: { stackTab: true }, quality: { budget: 600 }, role: { fold: true }, decisions: { terse: true }, trace: { pad: 27 } }, // terse (task 13a): the who chips took a line each
   "ko:reputation-market": { results: { rows: 4, resultsPhone: 2, rowsTab: 3 }, role: { fold: true }, architecture: { codeTab: 1 } },
   "en:reputation-market": { hero: { foot: 66 }, results: { results: 2, resultsPhone: 1, rows: 3, rowsTab: 2 }, role: { budget: 840, figsPhone: 0, tab: 360 }, architecture: { codeTab: 1 }, decisions: { terse: true }, quality: { tab: 500 } },

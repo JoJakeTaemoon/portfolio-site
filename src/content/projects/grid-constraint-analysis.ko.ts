@@ -26,7 +26,6 @@ export const gridConstraintAnalysisKo: CaseStudy = {
     { value: "29→46%", label: "선행 트리거 적중률, 가설 1건(dev · train 22→32%)" }, // M-05: :355
     { value: "−39점", label: "합의 점수, 운영 경로(train)" }, // M-05: a level, :351
     { value: "+22 · +13점", label: "정의 분리 효과(train · dev)" }, // M-05: a change, :352-354
-    { value: "24시간", label: "안에 고객 수정 요청 모두 반영" },
   ],
   leads: {
     results: "42일 동안 가설 실험 22건을 기록해 6건을 채택하고 6건을 기각했으며, 기각한 하나는 병합 뒤에 되돌린 가설 04입니다.",

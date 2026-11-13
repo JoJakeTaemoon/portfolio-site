@@ -26,7 +26,6 @@ export const reputationMarketEn: CaseStudy = {
     { value: "238 / 242", label: "planning answers received" },
     { value: "25 / 25", label: "top-priority UX issues fixed" },
     { value: "2,583", label: "automated tests, all pass on rerun" },
-    { value: "24 h", label: "to ship every change request" },
   ],
   leads: {
     results: "Thirteen days after the first commit on the new planning documents the admin tool was in, and the last commit came on Oct 30, 20 days in. Push notifications are on hold and four planning questions are still waiting for answers.",

@@ -28,7 +28,6 @@ export const constructionPmisEn: CaseStudy = {
     { value: "1 day", label: "redesign to report-core merge" },
     { value: "2 scope cuts", label: "of features already built" },
     { value: "12", label: "manuals: 4 roles × 3 languages" },
-    { value: "24 h", label: "to ship every change request" },
   ],
   leads: {
     results: "It began as a general-purpose PMIS, was rebuilt around the daily site report, and went as far as client UAT.",

@@ -24,12 +24,11 @@ export const ewaEn: CaseStudy = {
     { value: "5 months", label: "first commit to the migration" },
     { value: "Matched", label: "loaded vs expected totals" }, // M-05 scope: ewa.md:557
     { value: "7,080", label: "asserting tests, from run records" },
-    { value: "24 h", label: "to ship every change request" },
   ],
   leads: {
     results: "Within five months, v1's production data was on v2, and the reconciliation of the loaded counts and amounts against the values expected from v1 matched.",
     problem: "The job was to rebuild, from scratch, a service that moves real money, next to a v1 that was already running.",
-    role: "I designed and ran the team and its pipeline, and made it the rule that releases to production run on my instruction.",
+    role: "I designed and ran the team and its pipeline, and made it the rule that releases to production run on my instruction. I read and approved the code on the money paths myself, and the code the agents wrote is mine to answer for once it ships.",
     decisions: "The three money-path decisions started as agent defaults, two then changed by the stakeholder sheet and security-review findings; PII encryption and the v1 migration started from my input.",
     quality: "Two thirds of the 7,080 automated tests sit in the backend, where the money paths are, and the e2e tests aim at the boundaries of money and permissions.",
     retro: "For the flaky e2e suite I set a rule that tells an environment problem from a bug by the shape of the failures, and used it to narrow the cause.",
