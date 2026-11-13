@@ -1,0 +1,201 @@
+/* The hub's page CSS (task 24): only what sits inside a visual or what the kit leaves to the page.
+   The system, its grid, type, buttons and motion are the kit's (public/assets, unchanged). */
+
+/* Korean breaks between words, never inside one */
+html:lang(ko) { word-break: keep-all; overflow-wrap: anywhere; }
+
+/* hero: the masked EWA worker app (task 25), a phone rising from the frame's foot on the accent-tinted ground,
+   right of the float card; its foot runs into the frame's lower edge (the kit's .at-rise). It stands --s-7 under the
+   frame's top, set --s-6 in from its right edge, the card over its lower left (Jake 2026-11-13: the old 560px cap left
+   156px of empty ground above it at 1440x900) */
+.hub-shot { background: color-mix(in oklab, var(--accent) 10%, var(--bg)); }
+.hero__media.hub-shot > img.hub-phone { inset: auto var(--s-6) 0 auto; width: auto; height: calc(100% - var(--s-7)); max-height: none;
+  aspect-ratio: 390 / 844; object-fit: cover; object-position: top;
+  border: 10px solid var(--ink); border-bottom: 0; border-radius: 40px 40px 0 0; }
+@media (max-width: 1023px) { .hero__media.hub-shot > img.hub-phone { left: 50%; right: auto; translate: -50% 0; top: var(--s-5); height: calc(100% - var(--s-5)); } }
+.hub-who { color: var(--ink); font-weight: 500; }
+/* the float card holds the portrait (Jake 2026-11-13: the 32px avatar was too small to know the face): from 1024 a 4:5
+   head and shoulders on top, the card standing in the frame's empty ground left of the phone; stacked, a 64px-wide
+   portrait beside the name and the fact */
+.hub-shot > .ly-float.hub-card { width: clamp(150px, 32%, 208px); }
+.hub-card > .hub-portrait { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--r-sm); margin-bottom: var(--s-2); }
+@media (max-width: 1023px) {
+  .hub-shot > .ly-float.hub-card { width: min(300px, calc(100% - 2 * var(--s-5))); grid-template-columns: 64px minmax(0, 1fr); column-gap: var(--s-3); align-items: center; }
+  .hub-card > .hub-portrait { grid-row: 1 / span 2; margin: 0; }
+  .hub-card > :not(.hub-portrait) { grid-column: 2; }
+}
+
+/* featured work: one picture per card on the tinted ground: a phone screen rises from the foot, a desktop
+   screen sits in the corner cut by the right and bottom edges, a drawn cover is centred */
+#work .hub-thumb { height: clamp(120px, 16vw - 50px, 180px); margin-bottom: var(--s-5); border-radius: var(--r-md);
+  background: color-mix(in oklab, var(--accent) 10%, var(--bg)); }
+#work .hub-thumb > .stage { position: absolute; inset: 0; }
+#work .hub-thumb img.at-rise { --ax: calc(50% - 21%); --ay: var(--s-5); width: 42%; border-radius: var(--r-sm) var(--r-sm) 0 0; }
+#work .hub-thumb img.at-corner { --ax: var(--s-5); --ay: var(--s-5); width: 150%; border-radius: var(--r-sm) 0 0 0; }
+#work .hub-art { width: calc(100% - 2 * var(--s-3)); height: calc(100% - 2 * var(--s-3)); }
+#work .hub-art svg { width: 100%; height: 100%; }
+/* a drawn cover's unclassed shapes take the ink, so they read on the night ground too */
+#work .hub-art svg, .hub-mosaic > svg { color: var(--ink); fill: currentColor; }
+#work .card > p.muted { margin-top: var(--s-1); }
+
+/* drawn covers (CoverArt): the site's own drawing classes on the kit's tokens */
+.ca-strip { fill: var(--ink); fill-opacity: 0.86; }
+.ca-hole { fill: color-mix(in oklab, var(--accent) 10%, var(--bg)); }
+.ca-frame { fill: var(--surface); }
+.ca-glyph { fill: var(--accent); font-size: 26px; font-weight: 700; text-anchor: middle; }
+.ca-sub { fill: var(--muted); fill-opacity: 0.7; }
+.ca-arrow { fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.ca-net { stroke: var(--accent); stroke-opacity: 0.22; stroke-width: 1.2; }
+.ca-node { fill: var(--accent); fill-opacity: 0.35; }
+.ca-tower { fill: none; stroke: var(--ink); stroke-opacity: 0.75; stroke-width: 1.6; stroke-linejoin: round; }
+.ca-wire { fill: none; stroke: var(--accent); stroke-width: 1.4; }
+.ca-hot { fill: none; stroke: #a1414a; stroke-width: 2.8; }
+.ca-ground { stroke: var(--muted); stroke-opacity: 0.4; stroke-width: 1; }
+
+/* the role split (the EWA case's own roles figure): three lanes read top to bottom inside the frame */
+.hub-roles { justify-content: stretch; align-items: start; }
+.hub-roles .roles { display: grid; gap: var(--s-4); width: 100%; }
+.hub-roles .lane + .lane { padding-top: var(--s-4); border-top: 1px solid var(--line); }
+.hub-roles .lane > h3 { margin-bottom: var(--s-2); font: 500 var(--t-card)/1.3 var(--font-text); letter-spacing: -0.01em; }
+.hub-roles .lane ul { display: grid; gap: var(--s-1); }
+.hub-roles .lane li { font-size: var(--t-body); line-height: 1.5; }
+.hub-roles .nowrap { white-space: nowrap; }
+/* a lane's numbers before its lines (R-06): the value large in the accent, its label under it */
+/* (the numbers on the lane name's row, at its right: under them, the lane ran past its screen at 1440) */
+.hub-roles .lane { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; column-gap: var(--s-5); }
+.hub-roles .lane > ul { flex: 1 0 100%; }
+.hub-roles .lane-stats { display: flex; flex-wrap: wrap; gap: 4px 24px; margin: 0 0 var(--s-2); }
+.hub-roles .lane-stats > div { display: flex; flex-direction: column-reverse; }
+.hub-roles .lane-stats dd { margin: 0; font: var(--display-weight) var(--t-h3)/1.15 var(--font-display); color: var(--accent); font-variant-numeric: tabular-nums; }
+.hub-roles .lane-stats dt { font-size: var(--t-label); line-height: 1.35; color: var(--muted); }
+/* how I lead (M-09): the same lines as the summary PDF and the README, folded under the statement */
+.hub-howlead > ul { display: grid; gap: var(--s-2); max-width: 62ch; }
+.hub-howlead > ul > li { font-size: var(--t-small); line-height: 1.55; }
+#lead .hub-say { display: grid; gap: var(--s-6); justify-items: start; align-content: start; }
+#lead .hub-say > .section-head { margin-bottom: 0; }
+/* the statement a step under the h2, so the heading still leads the section */
+#lead .mo-wh__text { font-size: var(--t-h3); line-height: 1.3; }
+.hub-roles { padding: var(--s-6); }
+
+/* career: the jobs as rows, the route map in its frame */
+.hub-jobs > li { padding-block: var(--s-2); }
+.hub-jobs > li > p { font-size: var(--t-small); }
+.hub-flag { display: inline-block; width: 16px; height: 12px; margin-left: var(--s-1); vertical-align: -1px; }
+.hub-flag + .hub-flag { margin-left: var(--s-1); }
+.hub-route { padding: var(--s-6); align-self: stretch; }
+.hub-route .route { width: 100%; height: 100%; }
+/* the map fills its frame (drawn centred, as a contained picture), so the frame is the picture */
+.route svg { display: block; width: 100%; height: 100%; }
+.route-land { fill: color-mix(in oklab, var(--accent) 12%, var(--surface)); stroke: var(--accent); stroke-opacity: 0.35; stroke-width: 1; }
+.route-arc { fill: none; stroke: var(--accent); stroke-width: 2; }
+.route-head { fill: var(--accent); }
+.route-pin { fill: var(--surface); stroke: var(--accent); stroke-width: 3; }
+.route-name { fill: var(--ink); font: 500 15px var(--font-text); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.route-span { fill: var(--muted); font: 13px var(--font-text); font-variant-numeric: tabular-nums; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.route-narrow .route-name { font-size: 26px; }
+.route-narrow .route-span { font-size: 22px; }
+.route-narrow .route-arc { stroke-width: 3; }
+.route-list { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (min-width: 720px) { .route-narrow { display: none !important; } }
+@media (max-width: 719px) { .route-wide { display: none !important; } }
+
+/* the other six: their names as rows, their drawn covers as a mosaic beside them */
+.hub-more > li { padding-block: var(--s-4); }
+.hub-more .rows__name { text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 4px; }
+.hub-more .rows__name:hover { text-decoration-color: currentColor; }
+.hub-more > li > p { font-size: var(--t-small); }
+.hub-more__art { display: none; }
+/* a wall: six tiles from edge to edge, 2px apart, as tall as the list beside it */
+.hub-mosaic { align-self: stretch; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: 2px;
+  padding: 0; border: 0; background: var(--bg); align-items: stretch; justify-items: stretch; }
+.hub-mosaic::before { display: none; }
+.hub-mosaic > svg { width: 100%; height: 100%; min-height: 80px; padding: var(--s-4); background: color-mix(in oklab, var(--accent) 10%, var(--bg)); }
+/* a row pointed at or focused lights its tile in the wall (the same order; task 13d, R-17) */
+.hub-mosaic > svg { transition: background-color var(--dur) var(--ease); }
+.hub-more:has(> li:nth-child(1):is(:hover, :focus-within)) ~ .hub-mosaic > svg:nth-child(1),
+.hub-more:has(> li:nth-child(2):is(:hover, :focus-within)) ~ .hub-mosaic > svg:nth-child(2),
+.hub-more:has(> li:nth-child(3):is(:hover, :focus-within)) ~ .hub-mosaic > svg:nth-child(3),
+.hub-more:has(> li:nth-child(4):is(:hover, :focus-within)) ~ .hub-mosaic > svg:nth-child(4),
+.hub-more:has(> li:nth-child(5):is(:hover, :focus-within)) ~ .hub-mosaic > svg:nth-child(5),
+.hub-more:has(> li:nth-child(6):is(:hover, :focus-within)) ~ .hub-mosaic > svg:nth-child(6) {
+  background: color-mix(in oklab, var(--accent) 22%, var(--bg)); }
+
+/* the close: the email and the phone set large in the display face */
+.hub-contact { font: var(--display-weight) clamp(28px, 2.8vw + 16px, 56px)/1.4 var(--font-display); letter-spacing: var(--display-tracking); }
+@media (max-width: 1023px) { .hub-contact { font-size: 28px; } }
+/* a phone: each line under half the column wide (the system's edge rule), the line 44px for the thumb */
+@media (max-width: 639px) { .hub-contact { font-size: 17px; line-height: 44px; } }
+.hub-contact > a { text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: color-mix(in oklab, var(--ink) 30%, transparent); text-underline-offset: 0.18em; }
+.hub-contact > a:hover { text-decoration-color: currentColor; }
+
+/* stacked below 1024: the map and the mosaic at a set height */
+@media (max-width: 1023px) {
+  .hub-route { height: 200px; padding: var(--s-4); }
+  .hub-mosaic { height: 220px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hub-mosaic > svg { min-height: 0; }
+  .hub-roles { padding: var(--s-4); }
+  .hub-roles .roles { gap: var(--s-2); }
+  .hub-roles .lane + .lane { padding-top: var(--s-2); }
+  #lead .hub-say { gap: var(--s-5); }
+  #lead .mo-wh__text { font-size: var(--t-lead); }
+}
+
+/* tablet: the six cards two-up with a shorter picture */
+@media (min-width: 640px) and (max-width: 1023px) {
+  #work .hub-cards > .card { grid-column: auto / span 6; }
+  #work .hub-thumb { height: 104px; margin-bottom: var(--s-4); }
+}
+/* phone: the cards one under another, the picture shorter; the jobs a step apart and the map taller, so the two
+   screens of #career are filled; the other six in one screen (a 3 x 2 wall); the close and the directory in one */
+@media (max-width: 639px) {
+  .hub-jobs > li { padding-block: var(--s-5); }
+  /* the period as a label over its row (beside it, the title, the company and the flag broke over two lines and the
+     period over two; task 13d, K6) */
+  .hub-jobs > li { grid-template-columns: minmax(0, 1fr); row-gap: 2px; padding-block: var(--s-4); }
+  .hub-jobs .rows__value { grid-column: 1; grid-row: 1; text-align: left; max-width: none; font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .hub-route { height: 410px; }
+  /* #lead fills its two phone screens: the statement at the h3 size of a phone, the lanes with room between them */
+  #lead .grid { row-gap: var(--s-7); }
+  #lead .hub-say { gap: var(--s-7); }
+  #lead .mo-wh__text { font-size: var(--t-h3); }
+  .hub-roles { padding: var(--s-6) var(--s-5); }
+  .hub-roles .roles { gap: var(--s-6); }
+  .hub-roles .lane + .lane { padding-top: var(--s-6); }
+  .hub-more > li { padding-block: var(--s-2); }
+  .hub-mosaic { display: none; }
+  /* the words beside the cover start on the phone's split line (x 177 at 390) */
+  .hub-more > li { grid-template-columns: 141px minmax(0, 1fr); column-gap: var(--s-3); align-items: start; }
+  .hub-more > li > :not(.hub-more__art) { grid-column: 2; }
+  /* a phone shows the cover and the name; the field and the year are on the project's page */
+  .hub-more > li > p { display: none; }
+  .hub-more__art { display: block; grid-column: 1; grid-row: 1 / span 2; width: 141px; height: 80px; border-radius: var(--r-sm);
+    background: color-mix(in oklab, var(--accent) 10%, var(--bg)); color: var(--ink); fill: currentColor; }
+  .hub-more__art > svg { width: 100%; height: 100%; padding: var(--s-1); }
+  footer.closing .footer__lede { display: none; }
+  /* (task 13a: the lanes' numbers (R-06) and the how-I-lead fold put the English #lead past its two screens; the
+     lanes a step closer, their lines a step smaller) */
+  #lead .grid { row-gap: var(--s-5); }
+  #lead .hub-say { gap: var(--s-5); }
+  .hub-roles .roles { gap: var(--s-4); }
+  .hub-roles .lane + .lane { padding-top: var(--s-4); }
+  .hub-roles .lane li { font-size: 15px; line-height: 1.45; }
+  .hub-roles .lane-stats dd { font-size: var(--t-card); }
+}
+/* 1024-1279: the lanes a step smaller too, so the English #lead stays under a screen and a half (task 13a) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .hub-roles .lane li { font-size: 15px; line-height: 1.45; }
+  #lead .hub-say { gap: var(--s-5); }
+}
+@media (max-width: 1023px) {
+  footer.closing .closing__links .footer__col { grid-column: auto / span 6; }
+}
+@media (max-width: 639px) {
+  #work .hub-thumb { height: 104px; }
+  #work .hub-thumb img.at-rise { left: calc(50% - 80px); right: auto; width: 160px; }
+  #work .hub-thumb img.at-corner { left: var(--s-4); right: auto; width: 520px; }
+}
+/* the narrowest phones: the name and the menu button on the bar, the mail button in the sheet (as with the kit's action bar) */
+@media (max-width: 359px) {
+  .nav:not(.is-open) .nav__actions { display: none; }
+  .nav:not(.is-open) .nav__toggle { margin-left: auto; }
+}

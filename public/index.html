@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio</title>
+<script>
+  // ?lang=ko|en picks the language; otherwise the browser language does.
+  var q = new URLSearchParams(location.search).get("lang");
+  var l = q === "ko" || q === "en" ? q : (navigator.language || "").toLowerCase().startsWith("ko") ? "ko" : "en";
+  location.replace("/" + l + "/");
+</script>
+</head>
+<body><p><a href="/ko/">한국어</a> · <a href="/en/">English</a></p></body>
+</html>

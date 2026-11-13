@@ -1,0 +1,894 @@
+/* The project pages' page CSS (task 25): what sits inside a visual, the case hero's frame and the sections'
+   content. The system, its grid, type, buttons, nav, footer and motion are the kit's (public/assets, unchanged);
+   the tokens are the hub's (the kit layout's :root block). Briefs and /process/ use the case template (main.case). */
+
+/* the figures' own colours, on the kit's tokens; the diagram groups keep their hues, the people's group is the ink
+   (never violet) */
+:is(.case, .brief) {
+  --fg: var(--ink); --card: var(--surface); --font: var(--font-text); --mono: var(--font-mono, ui-monospace, monospace);
+  --radius: var(--r-md); --dur: 150ms;
+  --accent-soft: color-mix(in oklab, var(--accent) 12%, var(--bg));
+  --grid-line: color-mix(in oklab, var(--ink) 5%, transparent);
+  --g-client: #e7edf8;  --g-client-s: #3b62b0;
+  --g-core: #e5eee9;    --g-core-s: #2f5d50;
+  --g-data: #f5eedf;    --g-data-s: #8f641c;
+  --g-external: #f6e8e9; --g-external-s: #a1414a;
+  --g-process: #eeeef0; --g-process-s: #55585e;
+  --g-human: var(--surface); --g-human-s: var(--ink);
+}
+@media (prefers-color-scheme: dark) {
+  :is(.case, .brief) {
+    --g-client: #1b2333;  --g-client-s: #86a7e6;
+    --g-core: #1d2a25;    --g-core-s: #84c7ac;
+    --g-data: #2d271c;    --g-data-s: #d9ad5f;
+    --g-external: #2f1f21; --g-external-s: #e38c93;
+    --g-process: #222326; --g-process-s: #a9abb0;
+  }
+}
+html:lang(ko) { word-break: keep-all; overflow-wrap: anywhere; }
+
+/* ---------------------------------------------------------------- one section per screen
+   A case section is as many whole screens as its content needs (one or two by design: the long tails fold
+   into <details>), so an opened fold moves the next section by whole screens, never off the grid.
+   calc-size() rounds the section's own height up to the screen; without it the section simply grows. */
+main.case > section:not(.hero, [data-moment="pinned-chapters"]) { height: auto; min-height: calc(var(--h, 1) * 100svh); }
+/* 1024-1279 (a landscape tablet, a small laptop): the kit lets a section grow past its screens there (system.css); a
+   section a little over a short screen grows (up to a screen and a half), one past that takes two whole screens, so no
+   section is two half-empty screens and none shows the next one's head in its second (task 27) */
+@supports (height: calc-size(auto, size)) {
+  main.case > section:not(.hero, [data-moment="pinned-chapters"]) { height: calc-size(auto, round(up, size, 100svh)); min-height: 0; }
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    main.case > section:not(.hero, [data-moment="pinned-chapters"]) { height: calc-size(auto, max(size, round(up, size - 50svh, 100svh))); min-height: calc(var(--h, 1) * 100svh); }
+  }
+}
+@media (max-width: 639px) {
+  @supports (height: calc-size(auto, size)) {
+    main.case > section:not(.hero, [data-moment="pinned-chapters"]) { height: calc-size(auto, round(up, size, 100lvh)); }
+  }
+}
+/* the pinned chapters at rest (a phone, a tablet, reduced motion) are as tall as their steps: whole screens too */
+@supports (height: calc-size(auto, size)) {
+  main.case > section[data-moment="pinned-chapters"][data-moment]:not(.is-live) { height: calc-size(auto, round(up, size, 100svh)); min-height: 0; }
+}
+
+/* ---------------------------------------------------------------- the hero (split): the case's subject at the right */
+.hero--split .case-art { background: color-mix(in oklab, var(--accent) 10%, var(--bg)); }
+.case-art > :is(.case-phone, .case-screen, .case-drawing) { position: absolute; }
+/* a phone screen (or the clip) rises from the picture's foot, as on the hub; two stand side by side */
+.hero__media.case-art > .case-phone { inset: var(--s-7) auto auto 50%; translate: -50% 0; width: auto; height: calc(100% - var(--s-7)); max-height: none;
+  aspect-ratio: 390 / 846; object-fit: cover; object-position: top; border: 10px solid var(--ink); border-bottom: 0; border-radius: 40px 40px 0 0; background: var(--ink); }
+.hero__media.case-art[data-art="film"] > .case-phone { top: auto; bottom: 0; height: min(78%, 560px); }
+.hero__media.case-art[data-art="film"] > video.case-phone { left: 28%; }
+.hero__media.case-art[data-art="film"] > img.case-phone { left: 72%; }
+.case-art > .ly-play { z-index: 2; }
+/* a desktop screen sits in the corner, cut by the picture's right and bottom edges */
+.hero__media.case-art > .case-screen { inset: var(--s-7) auto auto var(--s-7); width: 160%; height: auto; max-width: none; object-fit: initial;
+  border-radius: var(--r-sm) 0 0 0; box-shadow: 0 0 0 1px var(--line); }
+/* a drawn cover (CoverArt), centred */
+.case-art > .case-drawing { inset: var(--s-7); display: grid; place-items: center; }
+.case-drawing > svg { width: min(100%, 520px); height: auto; max-height: 100%; color: var(--ink); fill: currentColor; }
+.case-art > .ly-play { color: var(--ink); }
+.case-art .ly-play__disc { background: var(--ink); color: var(--bg); }
+.case-art .ly-play__label { padding: var(--s-2) var(--s-3); border-radius: var(--r-md); background: var(--bg); color: var(--ink); font-size: var(--t-body); }
+.case-art .ly-play__label small { color: var(--muted); }
+/* the words: the h1 a step under the split's 72 so the tagline, the facts and the actions stand on the first screen */
+main.case .hero h1 { font-size: clamp(40px, 2vw + 24px, 52px); line-height: 1.08; }
+main.case .hero .hero__lead { font-size: var(--t-body); max-width: 52ch; }
+/* English titles run up to 79 characters: from 1024 the words take six columns, up to the split line's gutter, so the
+   h1 holds three lines where it can (task 25b) */
+@media (min-width: 1024px) { html:lang(en) main.case .hero__text { grid-column: 1 / span 6; } }
+main.case .hero__text > * + * { margin-top: var(--s-5); }
+.case-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3) var(--s-5); margin-block: var(--s-5) 0; }
+.case-facts > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 2px; min-width: 0; }
+.case-facts dd { margin: 0; font: var(--display-weight) var(--t-lead)/1.2 var(--font-display); letter-spacing: var(--display-tracking); font-variant-numeric: tabular-nums; }
+.case-facts dt { font-size: var(--t-label); line-height: 1.35; color: var(--muted); }
+/* the last fact takes what its row leaves, so every row runs to the right line (task 25b) */
+.case-facts > div:last-child:nth-child(3n + 2) { grid-column: span 2; }
+.case-facts > div:last-child:nth-child(3n + 1) { grid-column: 1 / -1; }
+@media (max-width: 1023px) {
+  /* the phone's top part, cropped in a box that ends at the picture's foot (its box never runs past the picture) */
+  .hero__media.case-art > .case-phone { top: var(--s-4); left: 50%; height: calc(100% - var(--s-4)); width: min(60%, 240px); aspect-ratio: auto; }
+  .hero__media.case-art[data-art="film"] > .case-phone { width: min(40%, 180px); }
+  .hero__media.case-art[data-art="film"] > video.case-phone { left: 28%; }
+  .hero__media.case-art[data-art="film"] > img.case-phone { left: 72%; }
+  .hero__media.case-art > .case-screen { top: var(--s-4); left: var(--s-4); }
+  .case-art > .case-drawing { inset: var(--s-4); }
+  .case-art > .ly-play { left: var(--s-4); bottom: var(--s-4); }
+}
+@media (max-width: 639px) {
+  main.case .hero h1 { font-size: 36px; line-height: 1.14; }
+  main.case .hero .hero__lead { font-size: 15px; line-height: 1.45; }
+  main.case .hero__text > * + * { margin-top: var(--s-3); }
+  .case-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2) var(--s-3); }
+  .case-facts > div:last-child:is(:nth-child(3n + 1), :nth-child(3n + 2)) { grid-column: auto; }
+  .case-facts > div:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .case-facts dd { font-size: 17px; }
+  .case-facts dt { font-size: 13px; }
+  .hero--split .hero__media.case-art { margin-top: var(--s-5); }
+  /* both actions on one line (they fit at 342), and the hero's foot a step above the fold, so its gap to the
+     next section is like the others' (a case whose words need it sets less: --hero-foot, task 25b) */
+  main.case .hero .btn-row { flex-direction: row; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-4); }
+  main.case .hero .btn-row > .btn { width: auto; flex: 0 1 auto; }
+  main.case > .hero { --hpadb: var(--hero-foot, 72px); }
+  /* English titles and taglines run longer (task 25b): the h1 a step over the h2, the facts in three columns, the
+     actions a step smaller so both stand on one line, the picture closer under them */
+  html:lang(en) main.case .hero h1 { font-size: 32px; line-height: 1.08; }
+  html:lang(en) main.case .hero__text > * + * { margin-top: var(--s-2); }
+  html:lang(en) main.case .hero .hero__lead { line-height: 1.4; }
+  html:lang(en) .case-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--s-2); }
+  html:lang(en) .case-facts > div:last-child:nth-child(odd) { grid-column: auto; }
+  html:lang(en) .case-facts > div:last-child:nth-child(3n + 2) { grid-column: span 2; }
+  html:lang(en) .case-facts > div:last-child:nth-child(3n + 1) { grid-column: 1 / -1; }
+  html:lang(en) .case-facts dt { line-height: 1.25; }
+  html:lang(en) main.case .hero .btn-row { gap: var(--s-2); }
+  html:lang(en) main.case .hero .btn-row > .btn { padding-inline: var(--s-3); font-size: 15px; }
+  html:lang(en) .hero--split .hero__media.case-art { margin-top: var(--s-3); }
+  .case-art .ly-play__label small { display: none; }
+}
+@media (min-width: 360px) and (max-width: 639px) {
+  /* the two actions on the facts' three columns, so the second starts on the facts' second column */
+  html:lang(en) main.case .hero .btn-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  html:lang(en) main.case .hero .btn-row > .btn--secondary { grid-column: span 2; }
+}
+
+/* ---------------------------------------------------------------- sections: the words left, the figures right */
+.case .section-head { margin-bottom: var(--s-6); }
+.case-text > .section-head { margin-bottom: var(--s-2); }
+.case-split { row-gap: var(--s-7); }
+@media (max-width: 639px) { .case-split { row-gap: var(--s-5); } .case .section-head { margin-bottom: var(--s-5); } }
+/* 768-1023 (task 27): the split stays side by side, as from 1024 (six columns each, on the page's one split line), so a
+   section holds its screen instead of stacking past it; the system drawing and its code keep the row. The split is at
+   least the screen's content height and the figures' column runs to its foot: the last figure's frame takes what the
+   screen leaves (layout-v4, the tablet: the split's frame as .fill), a trace's rows share it */
+@media (min-width: 768px) and (max-width: 1023px) {
+  main.case > section:not(#architecture) .case-split { align-items: stretch; min-height: calc(100svh - var(--padt) - var(--padb)); }
+  main.case > section:not(#architecture) .case-split > .case-text { align-self: start; }
+  main.case > section:not(#architecture) .case-split > .case-text { grid-column: 1 / span 6; }
+  main.case > section:not(#architecture) .case-split > .case-text.span-8 { grid-column: 1 / span 8; }
+  main.case > section:not(#architecture) .case-split > .case-figs { grid-column: 7 / span 6; }
+  main.case .case-split > .case-figs { align-content: stretch; grid-template-rows: auto; grid-auto-rows: auto; }
+  main.case .case-split > .case-figs > :not(:last-child) { align-self: start; }
+  main.case .case-split > .case-figs > .visuals:last-child > :not(:last-child) { align-self: start; }
+  main.case .case-split > .case-figs > .trace:last-child > li { display: grid; align-content: center; }
+}
+/* 768-1279 (task 27): a gallery of one screen is a one-screen split, its screen whole on the lit ground of a frame that
+   runs to the section's foot (the hero's picture ground) */
+@media (min-width: 768px) and (max-width: 1279px) {
+  main.case #gallery .case-split { align-items: stretch; min-height: calc(100svh - var(--padt) - var(--padb)); }
+  main.case #gallery .case-split > .case-text { align-self: start; }
+  main.case #gallery .case-figs { align-content: stretch; }
+  main.case #gallery .case-shot { place-content: center; padding: var(--s-4); border-radius: var(--r-md); background: color-mix(in oklab, var(--accent) 10%, var(--bg)); }
+  main.case #gallery .case-shot > img { aspect-ratio: auto; }
+}
+/* 640-1023 (task 13d): stacked, the words then the screen across the column, cropped to 4:3 round its middle as at 1440
+   (on a lit frame in six columns it stood about 200px tall) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  main.case #gallery .case-split { display: block; min-height: 0; }
+  main.case #gallery .case-figs { margin-top: var(--s-5); }
+  main.case #gallery .case-shot { padding: 0; background: none; }
+  main.case #gallery .case-shot > img { aspect-ratio: 4 / 3; object-fit: cover; }
+}
+/* a stacked hero runs its words, the facts' row with them, to the right line (the kit sets the column at its start) */
+@media (max-width: 1023px) { main.case .hero--split .hero__text { align-self: stretch; } }
+.case-text { display: grid; gap: 14px; align-content: start; }
+.case-solo { max-width: 62ch; }
+/* 640-1023 (task 27): the screens at rest a step larger, so the gallery fills its two screens; the decisions alone
+   in their section a step apart; the process cards' drawings a step taller */
+@media (min-width: 640px) and (max-width: 1023px) {
+  main.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__visual--lit { max-height: 44svh; }
+  main.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__visual--lit > img { max-height: calc(44svh - 2 * clamp(16px, 4vw, 40px)); }
+  main.case .case-solo > .decisions > .decision { padding-block: 20px; }
+  /* words alone take a shorter measure (32 syllables, 50 characters) at their desktop leading, as a column of the
+     split would */
+  main.case .case-solo > .prose { max-width: 50ch; }
+  html:lang(ko) main.case .case-solo > .prose { max-width: 32em; }
+  main.case .case-solo > .prose p { line-height: 1.7; }
+  main.case .case-split .visual { padding: var(--s-2) var(--s-3); }
+  main.case .case-split .flow > li > div { line-height: 1.4; }
+  main.case .case-solo > .decisions > .decision:first-child { padding-top: 0; }
+  main.case .roles { gap: var(--s-3); }
+  main.case .lane ul { line-height: 1.45; }
+  /* the decisions beside a figure a step closer; a flow and the role lanes in their six columns set a step smaller
+     (13-15px), so a section holds its screen at 768x1024 */
+  main.case .case-split .decision { padding-block: 4px; }
+  main.case .case-split .flow > li { padding-block: 2px; }
+  main.case .case-split .flow > li > div { font-size: 15px; line-height: 1.3; }
+  main.case .case-split .flow p { font-size: 13px; }
+  main.case .case-split .flow-loops { margin-top: var(--s-1); }
+  main.case .case-split .flow-loops ul { font-size: 13px; line-height: 1.35; }
+  main.case .case-split .fig-head { gap: 4px; margin-bottom: var(--s-2); }
+  main.case .case-split .fig-claim { font-size: 15px; line-height: 1.45; }
+  main.case .case-split .lane { padding-top: var(--s-2); }
+  main.case .case-split .lane ul { font-size: 13px; line-height: 1.35; }
+  /* the process cards one to a row, the words at the left and the drawing at the right (two to a row left the fifth
+     across the row, read as a band, and the drawings 68px on a tall tablet); each cards section takes two screens
+     (task 13d) */
+  main.process :is(#practices, #gates) .pipe-cards > .card { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); align-content: center; }
+  main.process :is(#practices, #gates) .pipe-cards > .card > * { grid-column: 1; }
+  main.process :is(#practices, #gates) .pipe-cards > .card > .pipe-panel { grid-column: 2; grid-row: 1 / span 3; align-self: center; margin: 0; border-radius: var(--p-r); --p-h: 120px; }
+  main.process .pipe-map { height: 116px; }
+  /* every system drawing and the pipeline drawn to the container's width, no sideways scroll (labels about 13px at 768) */
+  html main.case .diagram svg { min-width: 0; }
+  /* a list alone runs line to line; its last row closes on air, not a rule */
+  main.case .case-solo .case-list { max-width: none; }
+  main.case .case-solo :is(.case-list > li, .decisions > .decision):last-child { border-bottom: 0; }
+}
+/* an upright tablet as tall as 820x1180: words alone a step larger, so they fill their screen as on the others */
+@media (min-width: 640px) and (max-width: 1023px) and (min-height: 1100px) {
+  main.case .case-solo > .prose p { font-size: 17px; line-height: 1.8; }
+  html:lang(ko) main.case .case-solo > .prose { max-width: 30em; }
+  /* the process cards' drawings a step taller there, so each cards section fills its two screens (task 13d) */
+  main.process :is(#practices, #gates) .pipe-cards > .card > .pipe-panel { --p-h: 160px; }
+  main.process .pipe-map { height: 156px; }
+}
+/* a column alone under 1024px runs the container's width, so its ruled rows end on the right line, and a decision there
+   shows its result line under its title (the rows run the whole width, task 27) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  main.case .case-solo, html:lang(ko) main.case .case-solo { max-width: none; }
+  main.case .case-solo > .decisions--terse:not(.decisions--terse-tab) .decision:not([open]) .gist:not(.gist--decision) { display: block; }
+}
+/* Korean sets about 34 syllables in 62ch; a column alone takes 40 (task 25b) */
+html:lang(ko) .case-solo, html:lang(ko) .case-solo .prose { max-width: 40em; }
+.case-figs { display: grid; gap: var(--s-7); align-content: start; }
+.case-wide { display: grid; gap: var(--s-7); }
+.prose { display: grid; gap: var(--s-4); max-width: 62ch; }
+.prose p, .case-text > p { font-size: var(--t-body); line-height: 1.7; }
+.nowrap { white-space: nowrap; }
+/* the PDF's own lines (task 13d): whose page and where it lives, the URL of a link that prints */
+@media screen { .print-only { display: none !important; } }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* a fold: its summary is a plain line in the accent with the kit's chevron turn; print opens it */
+.fold > summary { display: inline-flex; align-items: center; gap: var(--s-2); min-height: 44px; cursor: pointer; list-style: none;
+  font-weight: 500; color: var(--accent); }
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary::after { content: ""; width: 8px; height: 8px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; rotate: 45deg; translate: 0 -2px; }
+.fold[open] > summary::after { rotate: 225deg; translate: 0 2px; }
+.fold > :not(summary) { margin-top: var(--s-4); }
+/* a closed fold's content takes no box on screen (a closed <details> still lays it out for scripts) */
+@media screen { details:not([open], .fig-fold, .wide-fold, .tab-fold, .mid-fold) > :not(summary) { display: none !important; } }
+/* more on a phone than on a tablet (task 27): standing open by CSS under 640px and from 1280px, closed between */
+@media screen and (min-width: 640px) and (max-width: 1279px) { details.mid-fold:not([open]) > :not(summary) { display: none !important; } }
+@media screen and (max-width: 639px), screen and (min-width: 1280px) {
+  details.mid-fold > summary { display: none; }
+  details.mid-fold::details-content { content-visibility: visible; display: contents; }
+  details.mid-fold > :not(summary) { margin-top: 0; }
+  details.mid-fold > :not(summary) + :not(summary) { margin-top: 14px; }
+}
+/* more on a tablet (task 27): standing open by CSS from 640 to 1279px, closed under and over it */
+@media screen and (max-width: 639px), screen and (min-width: 1280px) { details.tab-fold:not([open]) > :not(summary) { display: none !important; } }
+@media screen and (min-width: 640px) and (max-width: 1279px) {
+  details.tab-fold > summary { display: none; }
+  details.tab-fold::details-content { content-visibility: visible; display: contents; }
+  details.tab-fold > :not(summary) { margin-top: 0; }
+  details.tab-fold > :not(summary) + :not(summary) { margin-top: 14px; }
+}
+/* a tablet's fold (task 27): closed under 1280px, standing open by CSS from 1280px (the desktop's count) */
+@media screen and (max-width: 1279px) { details.wide-fold:not([open]) > :not(summary) { display: none !important; } }
+@media screen and (min-width: 1280px) {
+  details.wide-fold > summary { display: none; }
+  details.wide-fold::details-content { content-visibility: visible; display: contents; }
+  details.wide-fold > :not(summary) { margin-top: 0; }
+  details.wide-fold > :not(summary) + :not(summary) { margin-top: 14px; }
+}
+/* the further figures of a section fold on a phone only: from 640px the fold stands open by CSS, its summary hidden */
+@media screen and (max-width: 639px) { details.fig-fold:not([open]) > :not(summary) { display: none !important; } }
+@media screen and (min-width: 640px) {
+  details.fig-fold > summary { display: none; }
+  details.fig-fold::details-content { content-visibility: visible; display: contents; }
+  details.fig-fold > :not(summary) { margin-top: 0; }
+  details.fig-fold > :not(summary) + :not(summary) { margin-top: 14px; }
+}
+/* the results: ruled rows, a 1px rule closing each */
+.case-list { display: grid; max-width: 62ch; }
+.case-list > li { padding-block: var(--s-3); border-bottom: 1px solid var(--line); line-height: 1.6; }
+.case-list > li:first-child { padding-top: 0; }
+/* the screens: one framed shot */
+.case-shot { display: grid; gap: var(--s-4); }
+/* one screen alone (task 25b): cropped to 4:3 round its middle, where the dialog or panel its caption names stands */
+.case-shot > img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r-md); box-shadow: 0 0 0 1px var(--line); }
+/* pinned chapters: the lit ground is the figure ground of the hero, the cards and the hub (the kit's default is sand,
+   with no dark value; task 13d); white in print */
+.case [data-moment="pinned-chapters"] { --ground-bg: color-mix(in oklab, var(--accent) 10%, var(--bg)); }
+/* pinned chapters: a screen stands whole in the lit frame (a phone screen is tall, a desktop one wide) */
+.case [data-moment="pinned-chapters"] .mo-pc__visual--lit > img { width: auto; height: auto; max-width: 100%; max-height: 100%; aspect-ratio: auto; object-fit: contain;
+  border-radius: var(--r-sm); box-shadow: 0 0 0 1px var(--line); }
+.case [data-moment="pinned-chapters"] .mo-pc__visual--lit > img[data-frame="phone"] { border: 8px solid var(--ink); border-radius: 28px; }
+.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__visual--lit { aspect-ratio: auto; max-height: 30svh; }
+.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__visual--lit > img { max-height: calc(30svh - 2 * clamp(16px, 4vw, 40px)); }
+@media (max-width: 639px) {
+  .case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__visual--lit { max-height: 36svh; }
+  /* two screens: each a step larger, so the section fills its two screens (task 25b) */
+  .case [data-moment="pinned-chapters"]:not(.is-live):has(.mo-pc__step:nth-child(2):last-child) .mo-pc__visual--lit { max-height: 44svh; }
+  .case [data-moment="pinned-chapters"]:not(.is-live):has(.mo-pc__step:nth-child(2):last-child) .mo-pc__visual--lit > img { aspect-ratio: auto; max-height: calc(44svh - 2 * clamp(16px, 4vw, 40px)); }
+  .case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__steps { gap: var(--s-7); }
+  .case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__visual--lit > img { max-height: calc(36svh - 2 * clamp(16px, 4vw, 40px)); }
+}
+/* the retrospective's statement (word-highlight) a step under the h2, so the heading still leads */
+.case .mo-wh__text { font-size: var(--t-h3); line-height: 1.3; margin-bottom: var(--s-6); }
+.case-process { display: grid; gap: var(--s-4); justify-items: start; padding-top: var(--s-4); border-top: 1px solid var(--line); }
+/* stacked under 1024px it would run the whole width: parted by air there, not a rule (task 25b) */
+@media (max-width: 1023px) { .case-process { padding-top: 0; border-top: 0; } }
+@media (max-width: 639px) { .case .mo-wh__text { margin-bottom: var(--s-3); } }
+.case-process > h3 { font: 500 var(--t-card)/1.3 var(--font-text); letter-spacing: -0.01em; }
+
+/* the figures, scoped to the project pages (the hub shares this stylesheet and its own roles and map) */
+:is(main.case, main.brief) {
+  /* ---------------------------------------------------------------- figures (words above the picture) */
+  .visuals { display: grid; gap: var(--s-7); grid-template-columns: minmax(0, 1fr); }
+  .visual, .diagram, .codeshot { margin: 0; min-width: 0; }
+  .fig-head { display: grid; gap: 6px; margin-bottom: var(--s-3); }
+  .visual-title { font: 500 var(--t-card)/1.3 var(--font-text); letter-spacing: -0.01em; }
+  .fig-claim { font-size: var(--t-body); line-height: 1.6; max-width: 62ch; }
+  .fig-claim code { font: 0.9em var(--mono); }
+  .visual-src, .hint { font-size: var(--t-small); line-height: 1.5; color: var(--ink); }
+  .visual-src { font-family: var(--mono); }
+  .scroll-hint { display: none; font-size: var(--t-label); color: var(--muted); text-align: right; margin-bottom: var(--s-1); }
+  @media (max-width: 609px) { .scroll-hint { display: block; } }
+  /* a phone: the figures closer set, so a section holds its two screens */
+  @media (max-width: 639px) {
+    .fig-head { margin-bottom: var(--s-3); }
+    .flow { gap: 6px; padding: var(--s-2); }
+    .flow > li { padding: 6px 0; }
+    .roles { gap: var(--s-3); }
+    .vtimeline > li { padding: 6px 0; gap: 0 var(--s-2); }
+    .tband { margin-bottom: var(--s-4); }
+
+    .decision .gist { display: none; }
+    .bars { padding: var(--s-3); gap: var(--s-2); }
+  }
+  /* the figure panels sit on a faint 24px drafting grid (the site's annotation device, D7) */
+  .diagram-scroll, :is(.case-figs, .case-text) > .visuals > .visual, .fig-fold > .visuals > .visual {
+    background-color: var(--card);
+    background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 24px 24px; border: 1px solid var(--line); border-radius: var(--radius);
+  }
+
+  /* architecture: the drawing, its notes folded under it, then the code excerpts */
+  .case-code { display: grid; gap: var(--s-4); }
+  .diagram-scroll { overflow-x: auto; padding: var(--s-2); }
+  .diagram svg { display: block; width: 100%; max-width: 560px; margin-inline: auto; min-width: var(--vbw, 560px); height: auto; }
+  .node { cursor: pointer; }
+  .node rect { fill: var(--g-core); stroke: var(--g-core-s); stroke-width: 1.5; transition: stroke-width var(--dur) var(--ease); }
+  .node[data-group="client"] rect { fill: var(--g-client); stroke: var(--g-client-s); }
+  .node[data-group="data"] rect { fill: var(--g-data); stroke: var(--g-data-s); }
+  .node[data-group="external"] rect { fill: var(--g-external); stroke: var(--g-external-s); stroke-dasharray: 6 4; }
+  .node[data-group="process"] rect { fill: var(--g-process); stroke: var(--g-process-s); }
+  .node[data-group="human"] rect { fill: var(--g-human); stroke: var(--g-human-s); stroke-width: 2.5; }
+  /* mine filled, a rule that never fired dotted (M-02, spec §0); the filled box's words on the page's ground */
+  .node[data-group="me"] rect { fill: var(--ink); stroke: var(--ink); stroke-width: 2.5; }
+  .node[data-group="me"]:not([data-idle]) .node-label { fill: var(--bg); }
+  .node[data-group="me"]:not([data-idle]) .node-sub { fill: color-mix(in oklab, var(--bg) 80%, var(--ink)); }
+  .node[data-idle] rect { fill: var(--card); stroke: var(--ink); stroke-width: 2; stroke-dasharray: 1 6; stroke-linecap: round; }
+  .node:hover rect, .node:focus-visible rect { stroke-width: 2.5; }
+  .node:focus-visible { outline: 2px solid var(--action); outline-offset: 3px; }
+  .node[data-active] rect { stroke-width: 3.5; }
+  .node[data-group="me"]:not([data-idle])[data-active] rect { stroke: var(--accent); }
+  .node-label { font: 500 15px var(--font); fill: var(--fg); pointer-events: none; }
+  .node-sub { font: 13.5px var(--font); fill: var(--muted); pointer-events: none; }
+  .edge line { stroke: var(--muted); stroke-width: 1.4; opacity: 0.8; }
+  .edge[data-lit] line { stroke: var(--accent); stroke-width: 2.4; opacity: 1; }
+  .arrowhead { fill: var(--muted); }
+  .edge-label { font: 13.5px var(--font); fill: var(--muted); paint-order: stroke; stroke: var(--card); stroke-width: 4px; }
+  .notes { display: grid; gap: var(--s-2); }
+  .notes > div { border: 1px solid var(--line); border-radius: var(--r-sm); padding: var(--s-2) var(--s-3); transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease); }
+  .notes > div[data-active] { border-color: var(--accent); background: var(--accent-soft); }
+  .notes dt button { border: 0; background: none; padding: 0; min-height: 32px; font: 500 var(--t-body)/1.4 var(--font); color: var(--ink); cursor: pointer; }
+  .notes dd { margin: 0; font-size: var(--t-small); line-height: 1.55; color: var(--ink); }
+
+  /* flow: numbered steps, the actor beside */
+  :is(.case-figs, .case-text) > .visuals > .visual, .fig-fold > .visuals > .visual { padding: var(--s-3); }
+  .flow { display: grid; gap: 6px; }
+  .flow { gap: 0; }
+  .flow > li { display: flex; gap: var(--s-3); align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--line); }
+  .flow > li:last-child { border-bottom: 0; }
+  .flow > li > div { min-width: 0; }
+  .flow-n { font-size: var(--t-card); color: var(--accent); line-height: 1.2; }
+  .flow strong { font-weight: 500; margin-right: var(--s-2); }
+  .flow .muted { color: var(--ink); }
+  .flow p { font-size: var(--t-small); margin-top: 2px; color: var(--ink); }
+  .flow .badge { height: auto; padding: 0 var(--s-2); font-size: var(--t-label); border: 1px solid var(--line); color: var(--muted); background: none; white-space: nowrap; }
+  .flow .badge[data-actor="external"] { border-style: dashed; }
+  .flow .badge[data-actor="agent"] { color: var(--accent); border-color: var(--accent); }
+  .flow-loops { margin-top: var(--s-3); }
+  .flow-loops h4 { font: 500 var(--t-small)/1.4 var(--font); color: var(--muted); }
+  .flow-loops ul { font-size: var(--t-small); }
+
+  /* roles: three lanes, top to bottom in the column */
+  .roles { display: grid; gap: var(--s-4); }
+  .lane { padding-top: var(--s-3); border-top: 2px solid var(--accent); }
+  .lane[data-who="gate"] { border-top-style: dashed; }
+  .lane[data-who="human"] { border-top-color: var(--ink); }
+  .lane > :is(h3, h4) { font: 500 var(--t-body)/1.4 var(--font); margin-bottom: var(--s-1); }
+  .lane ul { display: grid; gap: 2px; font-size: var(--t-small); line-height: 1.55; }
+  /* a lane's numbers before its lines (R-06): the value in the display face, its label after it, beside the lane's name */
+  .lane:has(> .lane-stats) { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; column-gap: var(--s-5); }
+  .lane:has(> .lane-stats) > ul { flex: 1 0 100%; }
+  .lane-stats { display: flex; flex-wrap: wrap; gap: 2px 24px; margin: 0 0 2px; }
+  .lane-stats > div { display: flex; flex-direction: row-reverse; justify-content: flex-end; align-items: baseline; gap: 6px; }
+  .lane-stats dd { margin: 0; font: var(--display-weight) var(--t-card)/1.1 var(--font-display); color: var(--accent); font-variant-numeric: tabular-nums; }
+  .lane-stats dt { font-size: var(--t-label); line-height: 1.25; color: var(--muted); }
+
+  /* bars: baseline 0, the values written out */
+  .bars { display: grid; gap: var(--s-3); }
+  .visual:has(> .bars) { container-type: inline-size; }
+  .bars li { display: grid; grid-template-columns: minmax(7rem, 11rem) 1fr; gap: var(--s-1) var(--s-3); align-items: center; font-size: var(--t-small); }
+  .bar-track { display: flex; align-items: center; gap: var(--s-2); border-left: 1px solid var(--muted); height: 18px; }
+  .bar { display: block; flex: none; height: 18px; background: var(--accent); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .bar-val { font-variant-numeric: tabular-nums; font-weight: 500; white-space: nowrap; }
+  .bar-val .muted { font-weight: 400; color: var(--muted); }
+  .bar-pair { display: grid; gap: 3px; }
+  .bar-pair .bar-track, .bar-pair .bar { height: 13px; }
+  .bar-2 { background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+  .bar-track.signed { border-left: 0; gap: 0; background: linear-gradient(var(--muted), var(--muted)) no-repeat; background-size: 1px 100%; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .bar-track.signed .bar-val { margin-left: var(--s-2); }
+  .bar-pad { flex: none; }
+  @container (max-width: 479px) { .bars li { grid-template-columns: 1fr; } }
+
+  /* timeline: summary figures, the band of dates and spans, the dated rows */
+  /* the chips share one row, line to line (task 27) */
+  .t-stats { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--s-2); margin: 0 0 var(--s-4); }
+  .t-stats > div { display: flex; flex-direction: column-reverse; padding: var(--s-1) var(--s-3); border: 1px solid var(--line); border-radius: var(--r-sm); }
+  .t-stats dt { font-size: var(--t-label); color: var(--muted); }
+  .t-stats dd { margin: 0; font: var(--display-weight) var(--t-card)/1.3 var(--font-display); color: var(--accent); font-variant-numeric: tabular-nums; }
+  /* the band, drawn (task 27): the axis, its ticks and numbered dots, a bar and its label under it per span */
+  .tband { margin: 0 12px var(--s-5); }
+  .tband-svg { display: block; overflow: visible; font: 500 var(--t-label)/1 var(--font); font-variant-numeric: tabular-nums; }
+  .tband-line { stroke: var(--line); stroke-width: 2; }
+  .tband-tick line { stroke: var(--line); stroke-width: 1; }
+  .tband-tick text { fill: var(--muted); font-family: var(--mono); font-weight: 400; }
+  .tband-dot rect { fill: var(--bg); stroke: var(--accent); stroke-width: 2; transition: fill var(--dur) var(--ease); }
+  .tband-dot[data-n]:not([data-n="1"]) rect { fill: var(--accent-soft); }
+  .tband-dot text { fill: var(--ink); font-size: 11px; }
+  .tband-dot[data-hl] rect { fill: var(--accent); }
+  .tband-dot[data-hl] text { fill: var(--bg); }
+  .tband-span rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }
+  .tband-span text { fill: var(--ink); }
+  .tnum { display: grid; place-items: center; min-width: 22px; height: 22px; padding: 0 4px; border-radius: 11px; background: var(--bg); border: 2px solid var(--accent);
+    color: var(--ink); font: 500 11px/1 var(--font); font-style: normal; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .vtimeline > li[data-hl] .tnum { background: var(--accent); color: var(--bg); }
+  .vtimeline > li { display: grid; grid-template-columns: 28px 9rem minmax(0, 1fr); gap: 2px var(--s-2); align-items: baseline; padding: var(--s-2) 0; border-bottom: 1px solid var(--line); transition: background-color var(--dur) var(--ease); }
+  .vtimeline > li:last-child { border-bottom: 0; }
+  .vtimeline > li[data-hl] { background: var(--accent-soft); }
+  .vtimeline .tnum { align-self: center; justify-self: start; }
+  .vtimeline time { font: var(--t-label)/1.4 var(--mono); color: var(--accent); white-space: nowrap; }
+  .vtimeline strong { font-weight: 500; }
+  .vtimeline p { font-size: var(--t-small); line-height: 1.5; color: var(--ink); }
+  /* the rows read the figure's width, not the screen's: a figure in a tablet's split column is as narrow as a phone's */
+  .t-body { container-type: inline-size; }
+  @container (max-width: 559px) {
+    .vtimeline > li { grid-template-columns: 28px minmax(0, 1fr); }
+    .vtimeline time, .vtimeline li > div { grid-column: 2; }
+  }
+
+  /* decisions: the kit's card holding a native disclosure (the decision and the result in one line each) */
+  .decisions { display: grid; }
+  .decision { padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .decision:first-child { padding-top: 0; }
+  .decision summary { display: block; cursor: pointer; list-style: none; min-height: 44px; }
+  .decision summary .gist { margin-top: var(--s-1); }
+  .decision summary::-webkit-details-marker { display: none; }
+  .decision summary strong { font-weight: 500; font-size: var(--t-card); line-height: 1.3; }
+  .decision summary strong::after { content: " +"; color: var(--accent); }
+  .decision[open] summary strong::after { content: " −"; }
+  .decision .tag { display: inline-block; margin-left: var(--s-2); font: var(--t-label)/1.4 var(--mono); color: var(--muted); vertical-align: 2px; }
+  .gist { display: block; font-size: var(--t-small); line-height: 1.5; color: var(--ink); }
+  .gist b { color: var(--ink); font-weight: 500; margin-right: var(--s-1); }
+  .decision[open] .gist, .gist--decision { display: none; }
+  .decision dl { margin: var(--s-3) 0 0; padding-top: var(--s-3); border-top: 1px dashed var(--line); }
+  .decision dt { font-weight: 500; font-size: var(--t-small); color: var(--accent); margin-top: var(--s-3); }
+  .decision dt:first-child { margin-top: 0; }
+  .decision dd { margin: 2px 0 0; line-height: 1.6; }
+  .options { display: flex; flex-wrap: wrap; gap: var(--s-1); }
+  .options li { border: 1px solid var(--line); border-radius: var(--r-sm); padding: 0 var(--s-2); font-size: var(--t-small); }
+  .options li[data-chosen] { border-color: var(--accent); color: var(--accent); font-weight: 500; }
+  .options li[data-chosen]::before { content: "✓ "; }
+
+  /* code excerpts: the file and its point above the image */
+  .codeshots { display: grid; gap: var(--s-6); }
+  .codeshot-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+  .codeshot img { display: block; width: 100%; min-width: 560px; height: auto; }
+
+  /* trace: a native exclusive accordion on a rail */
+  .trace { display: grid; }
+  .trace > li:first-child summary { padding-top: 0; }
+  @media (max-width: 639px) { .trace summary { padding: 7px 0; } }
+  .trace > li { border-bottom: 1px solid var(--line); }
+  .trace summary { display: block; padding: 30px 0; cursor: pointer; font-weight: 500; line-height: 1.5; list-style: none; }
+  .trace summary::-webkit-details-marker { display: none; }
+  .trace details[open] > summary { color: var(--accent); }
+  .trace details p { margin: 0 0 var(--s-3); font-size: var(--t-small); line-height: 1.6; color: var(--ink); }
+  /* R-01: each step a numbered circle on one line that runs through the steps (each row draws its stretch; the first
+     starts at its circle, the last ends there) */
+  .trace > li { overflow: clip; }
+  .trace summary { display: grid; grid-template-columns: 28px minmax(0, 1fr); column-gap: var(--s-3); align-items: start; }
+  .trace details > p { margin-left: calc(28px + var(--s-3)); }
+  .trace-n { position: relative; display: grid; place-items: center; width: 28px; height: 28px; border: 1.5px solid var(--accent); border-radius: 50%;
+    background: var(--bg); color: var(--accent); font: 500 13px/1 var(--font); font-variant-numeric: tabular-nums; }
+  .trace-n::before, .trace-n::after { content: ""; position: absolute; left: calc(50% - 1px); width: 2px; height: 100vh; background: var(--line-strong); }
+  .trace-n::before { bottom: calc(100% + 1.5px); }
+  .trace-n::after { top: calc(100% + 1.5px); }
+  .trace > li:first-child .trace-n::before, .trace > li:last-child .trace-n::after { display: none; }
+  .trace summary > span:last-child { padding-top: 2px; }
+  .trace details[open] .trace-n { background: var(--accent); color: var(--accent-ink); }
+
+  /* numbers line up */
+  .case-facts, .t-stats, .bars, .vtimeline, .tband, .flow-n { font-variant-numeric: tabular-nums; }
+}
+
+/* ---------------------------------------------------------------- task 25b: the case pages' figures a step closer, so
+   each section holds one or two screens at 1440x900 and 390x844 */
+main.case {
+  .fig-claim code { overflow-wrap: anywhere; }
+  .scroll-hint { text-align: left; }
+  /* a decision's id after its title: the gap is the title's, so an id that wraps starts on the column's edge */
+  .decision .tag { margin-left: 0; }
+  .decision summary strong { margin-right: var(--s-2); }
+  /* with an id, the open mark follows the id, so a wrapped id starts its line on the column's edge */
+  .decision summary:has(.tag) strong::after { content: none; }
+  .decision summary .tag::after { content: " +"; color: var(--accent); }
+  .decision[open] summary .tag::after { content: " −"; }
+  /* from 1024 the drawing a step under its design size (labels 13.5px), and no wider than its column: at 1024-1279 a
+     three-column drawing ran 107px past its six columns, cut with no sign (task 13d; seven columns for it would put
+     this one split off the page's split line, SR-8, and stacked at 1024-1279 the drawing and its code ran past two
+     screens; so it fits its six: labels about 11px at 1024 for three columns, 8px for grid's four) */
+  @media (min-width: 1024px) { .diagram svg { min-width: 0; max-width: calc(var(--vbw, 560px) * 0.93); } }
+  .flow > li { padding: 4px 0; }
+  .flow > li > div { line-height: 1.45; }
+  .flow p { margin-top: 0; }
+  .flow-loops { margin-top: var(--s-2); }
+  /* the agent's badge on its own tint, so its words stand on one plain ground over the drafting grid */
+  .flow .badge[data-actor="agent"] { background: var(--accent-soft); border-color: var(--accent-soft); }
+  .decision { padding: 8px 0; }
+  /* a case's own decision padding on a phone (task 13a: the who chips took a line each) */
+  @media (max-width: 639px) { .decision { padding-block: var(--dec-pad, 8px); } }
+  .decisions--terse .gist { display: none; }
+  /* a case's decisions without the result line under 1280px only (task 27) */
+  @media (max-width: 1279px) { .decisions--terse-tab .gist { display: none; } }
+  .codeshot > .fig-claim { font-size: var(--t-small); line-height: 1.45; }
+  /* the trace's rows: eight or more closer from 640px; under 640px as on a desktop, or the case's own padding */
+  @media (min-width: 640px) { .trace:has(> li:nth-child(8)) summary { padding-block: var(--step-pad-desk, 18px); } }
+  /* 640-1023 (task 27): the words and figures a step closer, so a section that holds one screen at 1440 holds one
+     on an upright tablet too (one screen there holds 832px at 768x1024) */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .section-head { margin-bottom: var(--s-5); }
+    .prose { gap: var(--s-3); }
+    .prose p, .case-text > p { line-height: 1.55; }
+    .case-list > li { padding-block: var(--s-2); line-height: 1.5; }
+    .case-figs, .visuals { gap: var(--s-5); }
+    .fig-claim { line-height: 1.5; }
+    .vtimeline > li { padding: 6px 0; }
+    .tband { margin-bottom: var(--s-4); }
+  }
+  @media (max-width: 639px) {
+    .trace summary { padding-block: var(--step-pad, 30px); }
+    .flow > li { gap: var(--s-2); padding-block: var(--flow-pad-phone, 3px); }
+    .flow > li > div { line-height: 1.4; }
+    .fig-claim { font-size: 15px; line-height: 1.5; }
+  }
+}
+
+/* the key facts as ruled rows (a label, then the value), no boxes: under a case's results, in a brief's #built */
+.keyfacts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2) var(--s-5); margin: 0; font-variant-numeric: tabular-nums; }
+.keyfacts > div { display: flex; flex-direction: column; gap: 2px; }
+.keyfacts > div:last-child { grid-column: 1 / -1; }
+.keyfacts dt { font-size: var(--t-label); color: var(--muted); }
+.keyfacts dd { margin: 0; font-size: var(--t-small); line-height: 1.5; font-weight: 500; }
+
+/* ---------------------------------------------------------------- briefs and the process page (task 26): the case
+   template's sections (main.case), the parts only they have */
+/* a brief's drawn cover fills its frame (drawn centred, as a contained picture), so the frame is the picture */
+main.brief .case-art > .case-drawing > svg { width: 100%; height: 100%; max-height: none; }
+.brief-decision { display: grid; gap: var(--s-2); margin-top: var(--s-3); }
+.brief-decision > h3 { font: 500 var(--t-card)/1.3 var(--font-text); letter-spacing: -0.01em; }
+.brief-note { font-size: var(--t-small); line-height: 1.6; max-width: 62ch; }
+/* a brief's key facts as #built's second column (where it has no figure): their own heading line, open from 640px */
+.brief-facts .keyfacts { padding-top: var(--s-4); border-top: 1px solid var(--line); }
+/* (on an upright tablet they stand under the words instead, so the section's words and facts fill its screen) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  main.brief .case-split:has(> .case-figs > .brief-facts) { display: block; }
+  main.brief .case-split > .case-figs:has(> .brief-facts) { margin-top: var(--s-5); }
+  main.brief .brief-facts .keyfacts { padding-top: 0; border-top: 0; }
+  /* (stacked, the words run line to line as a column alone does, the last row closing on air) */
+  main.brief .case-split:has(> .case-figs > .brief-facts) .case-list { max-width: none; }
+  main.brief .case-split:has(> .case-figs > .brief-facts) :is(.case-list > li, .decisions > .decision):last-child { border-bottom: 0; }
+}
+/* (on a tablet as tall as 820x1180 those rows a step larger, as words alone are there, so they fill their screen; task
+   13d: #built lost its timeline to #results) */
+@media (min-width: 640px) and (max-width: 1023px) and (min-height: 1100px) {
+  main.brief .case-split:has(> .case-figs > .brief-facts) .case-list > li { font-size: 17px; line-height: 1.8; padding-block: var(--s-4); }
+}
+/* 640-1279 (task 13d): a brief's system drawing in #problem stands under the words at the container's width (in six
+   columns it set its labels at about 8px at 768, and ran past them at 1024) */
+@media (min-width: 640px) and (max-width: 1279px) {
+  main.brief #problem .case-split:has(.diagram) { display: block; min-height: 0; }
+  main.brief #problem .case-split:has(.diagram) > .case-figs { margin-top: var(--s-6); }
+}
+/* 1024-1279 (task 13f, re-check ④): a case's system drawing that set its labels at 6-10px in six columns (grid's
+   four columns, ewa's) stands over its code at the container's width (labels 13.5px); CaseView's stackTab, set only
+   where #architecture still holds two screens at 1024x768 */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  main.case .case-split.stack-tab { display: block; }
+  main.case .case-split.stack-tab > .case-figs { margin-top: var(--s-6); }
+  /* (the code under it at most 700px, on the left line: across the container it ran the section past two screens) */
+  main.case .case-split.stack-tab .codeshot { max-width: 700px; }
+  /* (and its tablet's extra code, open by CSS from 640px, a closed fold again here) */
+  .stack-tab details.tab-fold:not([open]) > :not(summary) { display: none !important; }
+  .stack-tab details.tab-fold > summary { display: inline-flex; }
+  .stack-tab details.tab-fold::details-content { content-visibility: revert; display: revert; }
+}
+/* (under 1024 a step closer, the words across the column and the drawing at most 480px wide, labels 12px, so the
+   words and the drawing hold one screen) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  main.brief #problem .case-split:has(.diagram) > .case-figs { margin-top: var(--s-4); }
+  main.brief #problem .case-split:has(.diagram) .section-head { margin-bottom: var(--s-4); }
+  main.brief #problem .case-split:has(.diagram) .diagram svg { max-width: 480px; }
+  main.brief #problem .case-split:has(.diagram) .prose { max-width: none; }
+}
+/* from 1024 a brief's flow a step more open than a case's (a brief's #problem is its words and the flow alone: at the
+   case's spacing it filled half its screen; task 13d) */
+@media (min-width: 1024px) { main.brief .flow > li { padding-block: var(--flow-pad, 8px); } }
+/* a brief's hero ends inside the first phone screen with the longest English title (its foot a step less) */
+@media (max-width: 639px) { main.brief > .hero { --hpadb: var(--hero-foot, 52px); } }
+/* the process cards: the pipeline drawn small on the card's panel (the accent-tinted ground of the hub's frames), the
+   nodes the card works on lit in the accent */
+.pipe-panel { --p-h: 84px; --ground-bg: color-mix(in oklab, var(--accent) 10%, var(--bg)); display: grid; place-items: center; padding: 2px var(--s-4); }
+.card > .pipe-panel { margin-top: var(--s-4); }
+.pipe-map { width: 100%; height: 80px; }
+.case :has(+ .pipe-cards) { margin-bottom: var(--s-5); }
+/* the fifth card on a phone: its summary inside the card, the card's words and drawing once it opens */
+.pipe-cards > details.card > summary { margin: 0; }
+@media (max-width: 639px) { .pipe-cards > details.card:not([open]) { padding-block: var(--s-2); } }
+.pipe-map rect { fill: none; stroke: color-mix(in oklab, var(--ink) 32%, transparent); stroke-width: 5; }
+/* the people's places by who holds them (spec §0, M-02): the client's outlined, mine filled, a rule never fired dotted;
+   a lit node's accent wins */
+.pipe-map rect[data-group="human"] { stroke: var(--ink); stroke-width: 7; }
+.pipe-map rect[data-group="me"] { fill: var(--ink); stroke: var(--ink); }
+.pipe-map rect[data-idle] { fill: var(--card); stroke: var(--ink); stroke-width: 7; stroke-dasharray: 0.1 16; stroke-linecap: round; }
+.pipe-map rect[data-lit] { fill: var(--accent); stroke: var(--accent); stroke-dasharray: none; }
+/* a card's map and the names of its lit nodes beside it (R-10), centred on the panel */
+.pmap { display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: center; gap: var(--s-4); width: 100%; height: 100%; }
+.pmap > .pipe-map { width: 100%; }
+.pmap-names { display: grid; gap: 4px; justify-items: start; }
+.pmap-names > li { padding: 0 6px; border-radius: var(--r-sm); background: var(--accent); color: var(--accent-ink); font: 500 var(--t-label)/20px var(--font-text); white-space: nowrap; }
+
+/* the who chips (spec §0): mine filled, the client's outlined, an agent's dashed; the hero's legend adds the dotted rule */
+.who { display: inline-block; height: 20px; padding: 0 6px; border-radius: 10px; font: 500 var(--t-label)/18px var(--font-text); white-space: nowrap; vertical-align: 2px;
+  border: 1px solid transparent; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.who[data-who="me"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.who[data-who="client"] { border: 1.5px solid var(--ink); color: var(--ink); line-height: 17px; }
+.who[data-who="agent"] { border: 1px dashed var(--line-strong); color: var(--muted); }
+.who[data-who="rule"] { border: 2px dotted var(--ink); color: var(--ink); line-height: 16px; }
+/* the gap is before the chip's neighbours' right edge, so a chip that wraps starts its line on the column's edge */
+.decision summary .tag { margin-right: var(--s-2); }
+
+/* the process hero (M-13; round-2 re-check ①): the legend's four chips, then three bands, the people's boxes at the
+   edges and one dashed band for the agents between them; the bands take the frame's height (≥80% at every width) */
+.case-art[data-art="map"] > .pmap-bands { display: flex; flex-direction: column; gap: var(--s-2); place-items: stretch; }
+.pmap-legend { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-bottom: var(--s-3); }
+.pb-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-4); flex: 1 1 0; min-height: 64px; }
+.pb-box { display: grid; place-items: center; padding: var(--s-3); border-radius: 28px; text-align: center; text-wrap: balance;
+  font: 500 var(--t-card)/1.25 var(--font-text); color: var(--ink); }
+.pb-box[data-who="client"] { border: 4px solid var(--ink); }
+.pb-box[data-who="me"] { background: var(--ink); color: var(--bg); }
+.pb-box[data-who="rule"] { border: 4px dotted var(--ink); }
+.pb-band { flex: 1.4 1 0; display: grid; place-items: center; min-height: 64px; padding: var(--s-4); border: 2px dashed var(--line-strong); border-radius: 28px;
+  text-align: center; text-wrap: balance; font: 500 var(--t-card)/1.3 var(--font-text); color: var(--muted); }
+.pmap-bands > .pb-arrow { flex: none; align-self: center; width: 12px; height: 28px; fill: none; stroke: var(--muted); stroke-width: 1.5; }
+
+/* a principle card's link to its evidence (R-05), the case's next project inside its page (R-08) */
+.pipe-ev { position: relative; color: inherit; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 4px; }
+/* (a 44px target on a phone: a transparent layer past the title's line) */
+.pipe-ev::before { content: ""; position: absolute; inset: -10px 0; }
+.pipe-ev:hover { text-decoration-color: currentColor; }
+.pipe-ev::after { content: " \2192"; color: var(--accent); }
+.case-next { justify-self: start; }
+
+/* M-12: the harness table, ruled rows, no column lines; the page's own row marked at its head; the table on the
+   figures' drafting ground (the section's figure) */
+.harness-ground { padding: 0 var(--s-4); background-color: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px); background-size: 24px 24px; }
+.harness tbody tr:last-child > * { border-bottom: 0; }
+.harness { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: var(--t-small); line-height: 21px; }
+.harness :is(th, td) { padding: 12px var(--s-3) 12px 0; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; font-weight: 400; }
+.harness thead th { font: 500 var(--t-label)/1.4 var(--font-text); color: var(--muted); border-bottom-color: var(--line-strong); }
+.harness tbody th, .harness thead th:first-child { padding-left: var(--s-3); }
+.harness-period { display: block; font: var(--t-label)/1.4 var(--mono); color: var(--muted); }
+/* the row heads read as links (re-check, recommended 3): underlined as the principle cards' titles, solid on hover */
+.harness tbody th a { font: 500 16px/1.35 var(--font-text); color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 4px; }
+.harness tbody th a:hover { text-decoration-color: currentColor; }
+.harness tr[data-focus] > th { box-shadow: inset 3px 0 0 var(--accent); }
+.harness tr[data-focus] > th a { color: var(--accent); }
+.harness-gate { display: block; }
+.harness-gate + .harness-gate { margin-top: 4px; }
+.harness .cell-label { display: none; }
+/* (Korean from 1024 a step more open: its cells hold one line, the section a third empty) */
+@media (min-width: 1024px) { html:lang(ko) .harness :is(th, td) { padding-block: 16px; } }
+@media (min-width: 640px) and (max-width: 1023px) {
+  .harness-ground { padding: 0; }
+  .harness { font-size: 13px; line-height: 19px; }
+  .harness :is(th, td) { padding-right: 8px; }
+  .harness tbody th, .harness thead th:first-child { padding-left: 8px; }
+}
+/* (an upright tablet as tall as 820x1180: the rows a step more open, so the table fills its screen as on the others) */
+@media screen and (min-width: 640px) and (max-width: 1023px) and (min-height: 1100px) {
+  .harness :is(th, td) { padding-block: 20px; }
+  .harness { font-size: 14px; line-height: 21px; }
+}
+/* a phone: each row a block, the column's name before each cell */
+@media screen and (max-width: 639px) {
+  .harness thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .harness-ground { padding: 0 var(--s-3); }
+  .harness, .harness tbody, .harness tr, .harness :is(th, td) { display: block; }
+  .harness tr { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .harness :is(th, td) { padding: 0; border: 0; }
+  .harness td { margin-top: 4px; }
+  .harness tbody th { padding-left: 0; }
+  .harness tr[data-focus] > th { box-shadow: none; }
+  .harness .cell-label { display: inline; margin-right: var(--s-2); font-size: var(--t-label); color: var(--muted); }
+  .harness-gate { display: inline; }
+  .harness-gate + .harness-gate { margin: 0 0 0 var(--s-2); }
+}
+main.process #pipeline .diagram { max-width: 820px; }
+/* from 1280 (task 13d): the drawing on eight columns and its node notes standing open on the four beside it, from the
+   heading's line (the drawing ended at 820px, a third of the row empty); a note shows its name, its words when its
+   node or its name is picked, pointed at or focused (all of it in the HTML, open in print) */
+@media screen and (min-width: 1280px) {
+  main.process #pipeline .wrap { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto auto auto auto 1fr; column-gap: var(--gutter); align-content: start; }
+  main.process #pipeline :is(.case-wide, .diagram) { display: contents; }
+  main.process #pipeline :is(.wrap, .diagram) > * { grid-column: 1 / span 8; }
+  main.process #pipeline .diagram > .fold { grid-column: 9 / span 4; grid-row: 1 / span 5; margin: 0; }
+  main.process #pipeline .diagram > .fold > summary { display: none; }
+  main.process #pipeline .diagram > .fold::details-content { content-visibility: visible; display: contents; }
+  main.process #pipeline .diagram > .fold > .notes { display: grid !important; margin: 0; gap: 4px; }
+  main.process #pipeline .notes > div { padding: 2px var(--s-3); }
+  main.process #pipeline .notes dt button { min-height: 30px; text-align: left; }
+  main.process #pipeline .notes > div:not([data-active], :hover, :focus-within) > dd { display: none; }
+  main.process #pipeline .notes > div > dd { padding-bottom: var(--s-2); }
+  main.process #pipeline .diagram svg { max-width: 760px; min-width: 0; }
+}
+/* the pipeline's claim and its drawing on one screen at 1440 (the English claim runs a line longer) */
+main.process #pipeline .section-head { margin-bottom: var(--s-5); }
+main.process #pipeline .mo-wh__text { margin-bottom: var(--s-5); }
+@media (min-width: 1024px) { main.process .diagram svg { min-width: calc(var(--vbw, 560px) * 0.88); max-width: calc(var(--vbw, 560px) * 0.88); } }
+
+/* the code excerpts are light images: on the dark page a step dimmer, so they are not its brightest block (task 13d,
+   R-13; a dark set of the images is the fuller fix) */
+@media screen and (prefers-color-scheme: dark) { main.case .codeshot img { filter: brightness(0.85); } }
+
+/* ---------------------------------------------------------------- print = the case PDF: one column, every fold open,
+   no frame heights, the light scheme */
+@media print {
+  @page { size: A4; margin: 14mm 12mm; }
+  :root { color-scheme: light; --p-bg: #fff; --p-surface: #fff; --p-ink: #000; --p-muted: #444; --p-accent: #2f5d50; }
+  html, body { background: #fff; }
+  body { font-size: 11pt; }
+  /* the contact stays on the PDF (the close's words in black on white); the directory and the buttons go */
+  footer.closing { height: auto !important; min-height: 0 !important; padding: 0 !important; background: none !important; color: #000; --ink: #000; --muted: #444; --bg: #fff; }
+  footer.closing .closing__links, footer.closing .btn { display: none !important; }
+  footer.closing .hub-contact { font-size: 14pt; }
+  /* (the footer's two rows and their gap stood after the contact with the links hidden, a blank last page when the
+     contact ended near a page's foot; task 13d) */
+  footer.closing > .wrap { display: block; }
+  header.nav, .skip-link, .scroll-hint, .fold > summary, .decision .gist, .btn-row, .ly-play, video, .hint, .case-art { display: none !important; }
+  main.case > section, main.case > section.hero, main.case > [data-moment] { height: auto !important; min-height: 0 !important; padding: 0 0 8mm !important; }
+  /* the title's Hangul (the fallback face, taller than the Latin face that sets the line) inks above its line box, and
+     page 1's top edge cut it there: 3mm of room over it (re-check ③; every case's page 1, not only /process) */
+  main.case > section.hero { padding-top: 3mm !important; }
+  main.case > section.hero > .wrap, main.case > section > .wrap { height: auto; }
+  main.case .hero .hero-text { display: block; }
+  main.case .hero h1 { font-size: 24pt; }
+  /* whose page and where it lives, under the title on page 1 (task 13d, D-057 ⑦); a printed link shows its URL */
+  .print-id { margin-top: 2mm; font-size: 9.5pt; color: #444; }
+  .print-url { display: block; margin-top: 1mm; font-size: 9.5pt; color: #444; }
+  /* the hero's word mask (the entrance) clips the title's top in print: the words stand whole (task 13d) */
+  .hero[data-enter] .m-w { overflow: visible !important; padding-bottom: 0 !important; margin-bottom: 0 !important; }
+  .hero[data-enter] .m-w__in { transform: none !important; translate: none !important; opacity: 1 !important; }
+  /* the headings a step under the title (the kit's h2 set about 26.5pt on A4, over the 24pt h1) */
+  main.case h2 { font-size: 18pt; line-height: 1.2; }
+  main.case .mo-wh__text { font-size: 14pt; line-height: 1.35; }
+  /* five facts on one row: the screen's span-2 for a last fact is undone */
+  .case-facts { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .case-facts > div:last-child { grid-column: auto !important; }
+  .case-split { display: block; }
+  .case-split > * + * { margin-top: 5mm; }
+  /* the blocks that hold running text are plain blocks in print: Chrome lays a grid out once, so a row that grows
+     where it breaks over a page (lines carried over, a cloned padding) ran under the next row (grid ko's last page,
+     rm ko's decisions; task 13d) */
+  main.case :is(.case-text, .case-figs, .case-wide, .case-code, .prose, .decisions, .visuals, .codeshots, .case-list, .section-head, .brief-decision, .case-process) { display: block; }
+  main.case :is(.case-text, .case-figs, .case-wide, .case-code, .visuals, .codeshots) > * + * { margin-top: 5mm; }
+  main.case .case-process > * + * { margin-top: 2mm; }
+  main.case :is(.case-text, .case-figs, .case-wide, .case-code, .visuals, .codeshots) > :is(ul, ol, .visuals) + .fold { margin-top: 0; }
+  .prose > * + * { margin-top: 3mm; }
+  .section-head > * + * { margin-top: 2mm; }
+  /* a heading never stands alone at a page's foot: a heading and the 50mm under it break together (Chrome keeps
+     break-after: avoid only between siblings, so the room is reserved by an empty block that the next margin takes
+     back); a decision's label keeps 20mm (task 13d) */
+  main.case .section-head { break-inside: avoid; break-after: avoid; }
+  main.case .diagram > .fig-head { break-after: avoid; }
+  main.case .section-head::after { content: ""; display: block; height: 50mm; margin-bottom: -50mm; }
+  .decision dt { break-inside: avoid; break-after: avoid; }
+  .decision dt::after { content: ""; display: block; height: 20mm; margin-bottom: -20mm; }
+  details::details-content { content-visibility: visible; display: block; }
+  .diagram-scroll, .codeshot-scroll { overflow: visible; }
+  /* (the screen rules are scoped to main.case, so print needs the weight to undo them) */
+  .diagram svg, .codeshot img { min-width: 0 !important; max-width: 100% !important; }
+  /* the labels' halo (a stroke under the fill) prints a second copy of each label in the text layer ("기기본본값값"):
+     plain labels in print (task 13d) */
+  main.case .edge-label { stroke: none; paint-order: normal; }
+  h2, h3, .fig-head, .decision summary { break-after: avoid; }
+  .flow > li, .lane, .notes > div, .trace > li, .t-stats > div, .codeshot, .diagram-scroll, .pipe-cards > .card, .keyfacts { break-inside: avoid; }
+  .decision { -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  main.case .decision summary { min-height: 0; }
+  .decision summary strong::after, .decision summary .tag::after { display: none; }
+  .mo-wh .mo-w { color: #000 !important; }
+  /* the source line in the text's face, muted (a Hangul line in the monospace fallback ran wide), and no step at a
+     fold's edge (task 13d, R-03) */
+  main.case .visual-src { font-family: var(--font); color: #444; font-size: 9pt; }
+  .fold > :not(summary) { margin-top: 0; }
+  /* the node notes two to a row (11-15 cards took a page and a half) */
+  .notes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  main.case .trace summary { padding-block: 2mm !important; }
+  /* the screens (pinned chapters at rest): a grid of cards, the heading and the lines over the screen; three phone
+     screens to a row, a desktop screen across it, no screen over 95mm. The screen's at-rest rules (30svh; 44svh at
+     640-1023, which print's page width falls in) are as specific as this, so these come after them (task 13d) */
+  main.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6mm; align-items: start; }
+  main.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__step { display: block; border: 0; padding: 0; break-inside: avoid; }
+  main.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__step:has(img:not([data-frame="phone"])) { grid-column: 1 / -1; }
+  main.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__step > * + * { margin-top: 2mm; }
+  main.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__step h3 { font-size: 11pt; }
+  main.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__step p { font-size: 9.5pt; line-height: 1.45; }
+  main.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__visual--lit { max-height: none; aspect-ratio: auto; padding: 0; background: none; display: block; }
+  main.case [data-moment="pinned-chapters"]:not(.is-live) .mo-pc__visual--lit > img { max-height: 95mm; width: auto; max-width: 100%; }
+  .case [data-moment="pinned-chapters"] { --ground-bg: #fff; }
+  main.case #gallery .case-shot > img { width: 100%; max-height: 95mm; }
+  a { text-decoration: none; }
+  .pipe-panel { --p-h: 90px; }
+  /* task 13a: the lit nodes' names a line each (black on white), the harness table at 8.5pt with its head, the next
+     project's link left to the screen */
+  .pmap-names > li { background: #fff; color: #000; border: 1px solid var(--p-accent); line-height: 18px; }
+  .harness-ground { padding: 0; border: 0; background: none; }
+  .harness { font-size: 8.5pt; line-height: 1.35; }
+  .harness tr { break-inside: avoid; }
+  .harness :is(th, td) { padding: 2mm 2mm 2mm 0; }
+  .case-next { display: none !important; }
+  .pipe-ev { text-decoration: none; }
+  .pipe-ev::after { content: none; }
+}
+/* English bodies run about twice the Korean characters: from 1024 the wide cards' words take the card, the map a step
+   lower, so a cards section holds its one screen at 1440 */
+@media (min-width: 1024px) {
+  html:lang(en) .pipe-cards > .card.span-6 > p { max-width: none; }
+  html:lang(en) .pipe-cards > .card > p { font-size: 15px; line-height: 22px; }
+  html:lang(en) main.process .pipe-cards { row-gap: var(--s-4); }
+  html:lang(en) main.process .card > .pipe-panel { margin-top: var(--s-3); }
+}
+
+/* ---------------------------------------------------------------- a tall window (every kit page)
+   The kit makes every section one window tall. In a tall window (Jake's portrait monitor, 1200x1530) content laid
+   out for 1440x900 left 590-840px of empty ground under each hub section and the hero phone 786px under its
+   frame's top (Jake 2026-11-13). From 1024 wide and over 900 tall one section per window cannot hold anyway, so
+   the hero is its 1440x900 self and every other section is as tall as its content (its --padt and --padb
+   between them). None of the checked sizes (1440x900, 1024x768, 820x1180, 768x1024, 390x844) matches, so the
+   checks and gates see the same page. No kit page uses .fill or .g2, which need a definite height.
+   Last in the file: it must follow the case rules above. */
+@media (min-width: 1024px) and (min-height: 901px) {
+  :root {
+    --ly-screen: calc(900px - var(--ly-nav));
+    --ly-fit: calc(900px - var(--padt) - var(--padb) - var(--bar));
+    --ly-hero-h: calc(900px - var(--nav) - var(--hgap) - var(--hpadb) - var(--bar));
+  }
+  main > :is(.hero, .section--hero) { height: 900px; }
+  main > :is(section, .section):not(.hero, .section--hero), footer.closing,
+  main.case > section:not(.hero, [data-moment="pinned-chapters"]),
+  main.case > section[data-moment="pinned-chapters"][data-moment]:not(.is-live) { height: auto; min-height: 0; }
+  main.case #gallery .case-split { min-height: 0; }
+  /* the pinned chapters, live: the stage as tall as its content, padded as a section and held under the header while
+     it is scrubbed over --mo-hold x 450px (the kit's moment.css loads after this file, so :root lifts these over its
+     rules); content-sized, the section left the pin no room to scroll */
+  :root [data-moment="pinned-chapters"].is-live { height: calc(100svh + var(--mo-hold) * 450px); }
+  :root main [data-moment="pinned-chapters"][data-moment].is-live > .mo-pc__grid { height: auto; padding-block: var(--padt) var(--padb); align-content: start; }
+}
+/* the pinned chapters, live from 1024: the kit's 640-1279 rule grows a section's .wrap to the section, which stretched
+   the sticky stage over the section's two screens, so it never held and its words sat a screen down (1200x900,
+   1024x768; Jake 2026-11-13). The stage keeps its own height (one screen; 900px in a tall window). */
+:root main [data-moment="pinned-chapters"][data-moment].is-live > .mo-pc__grid { flex: none; }
